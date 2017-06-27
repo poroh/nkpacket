@@ -110,7 +110,12 @@ get_auto_ips() ->
     end,
     case nkpacket_app:get(ext_ip) of
         auto -> 
-            ExtIp = nkpacket_stun:ext_ip(),
+            %% RC patch for HBC project.
+            %% We assume that HBC server is not located behind the NAT,
+            %% also we don't want HBC server to make any requests to public Internet.
+            %% So we disbale obtaining of external IP using STUN servers and just make
+            %% external IP equal to interface IP.
+            ExtIp = nkpacket_app:get(main_ip),
             nkpacket_app:put(ext_ip, ExtIp);
         _ ->
             ok
