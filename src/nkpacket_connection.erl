@@ -544,7 +544,7 @@ handle_info({timeout, _, idle_timer}, State) ->
                 false -> {stop, normal, State}
             end;
         false ->
-            lager:debug("Connection timeout", []),
+            %% lager:debug("Connection timeout", []),
             {stop, normal, State}
     end;
 
@@ -592,8 +592,13 @@ terminate(Reason, State) ->
         nkport = NkPort
     } = State,
     catch call_protocol(conn_stop, [Reason, NkPort], State),
-    lager:debug("Connection ~p process stopped (~p, ~p)", 
-           [Transp, Reason, self()]),
+    case Transp of
+        udp ->
+            ok;
+        Transp ->
+            lager:debug("Connection ~p process stopped (~p, ~p)", 
+                        [Transp, Reason, self()])
+    end,
     % Sometimes ssl sockets are slow to close here
     spawn(fun() -> nkpacket_connection_lib:raw_stop(NkPort) end),
     ok.

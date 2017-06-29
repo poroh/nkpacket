@@ -114,7 +114,7 @@ send([Uri|Rest], Msg, Opts) when is_binary(Uri); is_list(Uri) ->
 send([#uri{}=Uri|Rest], Msg, Opts) ->
     case nkpacket:resolve(Uri, Opts) of
         {ok, RawConns, Opts1} ->
-            lager:debug("transport send to ~p (~p)", [RawConns, Rest]),
+            %% lager:debug("transport send to ~p (~p)", [RawConns, Rest]),
             send(RawConns++Rest, Msg, Opts1);
         {error, Error} ->
             lager:notice("Error sending to ~p: ~p", [Uri, Error]),
@@ -127,7 +127,7 @@ send([#nkport{socket=undefined}=NkPort|Rest], Msg, Opts) ->
     send([{current, Conn}|Rest], Msg, Opts);
 
 send([Port|Rest], Msg, Opts) when is_pid(Port); is_record(Port, nkport) ->
-    lager:debug("transport send to nkport ~p", [Port]),
+    %% lager:debug("transport send to nkport ~p", [Port]),
     case do_send(Msg, [Port], Opts#{udp_to_tcp=>false}) of
         {ok, Res} -> {ok, Res};
         {error, Opts1} -> send(Rest, Msg, Opts1)
@@ -151,7 +151,7 @@ send([{Protocol, Transp, Ip, 0}|Rest], Msg, Opts) ->
 send([{connect, Conn}|Rest], Msg, Opts) ->
     RemoveOpts = [udp_to_tcp, last_error],
     ConnOpts = maps:without(RemoveOpts, Opts),
-    lager:debug("transport connecting to ~p (~p)", [Conn, ConnOpts]),
+    %% lager:debug("transport connecting to ~p (~p)", [Conn, ConnOpts]),
     case connect([Conn], ConnOpts) of
         {ok, Pid} ->
             case do_send(Msg, [Pid], Opts) of
@@ -175,7 +175,7 @@ send([{_, _, _, _}=Conn|Rest], Msg, #{class:=_}=Opts) ->
     end,
     case do_send(Msg, Pids, Opts) of
         {ok, Res} -> 
-            lager:debug("transport used previous connection to ~p (~p)", [Conn, Opts]),
+            %% lager:debug("transport used previous connection to ~p (~p)", [Conn, Opts]),
             {ok, Res};
         retry_tcp ->
             Conn1 = setelement(2, Conn, tcp), 
@@ -309,7 +309,7 @@ do_connect({Protocol, Transp, Ip, Port}, Opts) ->
         undefined when ListenOpt ->
             {error, no_listening_transport};
         _ ->
-            lager:debug("transport base port: ~p", [BasePort]),
+            %% lager:debug("transport base port: ~p", [BasePort]),
             % Our listening host and meta must not be used for the new connection
             Meta2 = maps:remove(host, Meta1),
             Meta3 = maps:remove(path, Meta2),
