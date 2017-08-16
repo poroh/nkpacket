@@ -177,7 +177,8 @@
         force_new => boolean(),             % Forces a new connection
         udp_to_tcp => boolean(),            % Change to TCP for large packets
         udp_max_size => pos_integer(),      % Used only for this sent request
-        pre_send_fun => pre_send_fun()
+        pre_send_fun => pre_send_fun(),
+        last_error => term()
     }.
 
 
@@ -426,8 +427,8 @@ get_remote_bin(Term) ->
                     (nklib_util:to_host(Ip))/binary, ":",
                     (nklib_util:to_binary(Port))/binary
                 >>};
-        {error, Error} ->
-            {error, Error}
+        error ->
+            error
     end.
 
 

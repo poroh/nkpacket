@@ -68,7 +68,8 @@ resolve(Uri) ->
 %% - perform NAPTR queries
 %%
 -spec resolve(nklib:user_uri(), opts()) -> 
-    {ok, [{uri_transp(), inet:ip_address(), inet:port_number()}]}.
+    {ok, [{uri_transp(), inet:ip_address(), inet:port_number()}]} |
+    { error, term() }.
 
 resolve([], _Opts) ->
     {ok, []};
@@ -343,7 +344,7 @@ init([]) ->
 
 %% @private
 -spec handle_call(term(), {pid(), term()}, #state{}) ->
-    {reply, term(), #state{}} | {noreply, term(), #state{}} | 
+    {reply, term(), #state{}} | {noreply, #state{}} | 
     {stop, term(), #state{}} | {stop, term(), term(), #state{}}.
 
 handle_call(Msg, _From, State) -> 

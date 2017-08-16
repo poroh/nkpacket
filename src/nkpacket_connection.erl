@@ -264,13 +264,13 @@ ranch_start_link(NkPort, Ref) ->
     listen_monitor :: reference(),
     srv_monitor :: reference(),
     user_monitor :: reference(),
-    bridge :: nkpacket:nkport(),
-    bridge_type :: up | down,
-    bridge_monitor :: reference(),
+    bridge :: nkpacket:nkport() | undefined,
+    bridge_type :: up | down | undefined,
+    bridge_monitor :: reference() | undefined,
     ws_state :: term(),
     timeout :: non_neg_integer(),
-    timeout_timer :: reference(),
-    refresh_fun :: fun((nkpacket:nkport()) -> boolean()),
+    timeout_timer :: reference() | undefined,
+    refresh_fun :: fun((nkpacket:nkport()) -> boolean()) | undefined,
     protocol :: atom(),
     proto_state :: term()
 }).
@@ -384,6 +384,8 @@ init([NkPort]) ->
 
 
 %% @private
+-spec ranch_init( any(), any() ) -> no_return().
+
 ranch_init(NkPort, Ref) ->
     ok = proc_lib:init_ack({ok, self()}),
     ok = ranch:accept_ack(Ref),
@@ -419,7 +421,7 @@ conn_init(#nkport{transp=Transp}=NkPort) when Transp==ws; Transp==wss ->
 
 %% @private
 -spec handle_call(term(), {pid(), term()}, #state{}) ->
-    {reply, term(), #state{}} | {noreply, term(), #state{}} | 
+    {reply, term(), #state{}} | {noreply, #state{}} | 
     {stop, term(), #state{}} | {stop, term(), term(), #state{}}.
 
 handle_call({nkpacket_apply_nkport, Fun}, _From, #state{nkport=NkPort}=State) ->

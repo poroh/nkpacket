@@ -79,17 +79,17 @@
 %% Meta can contain most values from listener_opts and connect_opts
 
 -record(nkport, {
-    class :: nkpacket:class(),
-    protocol :: nkpacket:protocol(),
-    transp :: nkpacket:transport(),
-    local_ip :: inet:ip_address(),
-    local_port :: inet:port_number(),
-    remote_ip :: inet:ip_address(),
-    remote_port :: inet:port_number(),
-    listen_ip :: inet:ip_address(),
-    listen_port :: inet:port_number(),
-    pid :: pid(),
-    socket :: nkpacket_transport:socket(),
+    class :: nkpacket:class() | undefined,
+    protocol :: nkpacket:protocol() | undefined,
+    transp :: nkpacket:transport() | undefined,
+    local_ip :: inet:ip_address() | undefined,
+    local_port :: inet:port_number() | undefined,
+    remote_ip :: inet:ip_address() | undefined,
+    remote_port :: inet:port_number() | undefined,
+    listen_ip :: inet:ip_address() | undefined,
+    listen_port :: inet:port_number() | undefined,
+    pid :: pid() | undefined,
+    socket :: nkpacket_transport:socket() | undefined,
     meta = #{} :: map()
 }).
 

@@ -69,9 +69,9 @@
     id :: term(),         
     module :: module(),    
     transp :: http | https | ws | wss,
-    host :: binary() | all,
+    host :: binary() | all | any,
     paths :: [binary()],
-    ws_proto :: binary() | all,
+    ws_proto :: binary() | all | any,
     meta :: filter_meta(),
     mon :: reference()
 }).
