@@ -217,7 +217,7 @@ send() ->
 		nkpacket:send({current, {test_protocol, tcp, {0,0,0,0}, Listen2}}, msg1),
 	{error, no_listening_transport} = 
 		nkpacket:send({test_protocol, sctp, {127,0,0,1}, Listen2}, msg1),
-	Msg = crypto:rand_bytes(5000),
+	Msg = crypto:strong_rand_bytes(5000),
 	{error, no_listening_transport} = 	% No class
 		nkpacket:send({test_protocol, udp, {127,0,0,1}, Listen2}, {msg1, Msg}, M1),
 	{error, udp_too_large} = 
